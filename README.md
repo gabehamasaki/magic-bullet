@@ -29,16 +29,40 @@ make sync-types
 
 ## Desenvolvimento
 
-Terminal 1:
-
 ```bash
-make dev-backend
+make dev
 ```
 
-Terminal 2:
+## Produção com Docker
+
+Crie um arquivo `.env.prod` a partir do exemplo:
 
 ```bash
-make dev-frontend
+cp .env.prod.example .env.prod
+```
+
+Build das imagens:
+
+```bash
+make prod-build
+```
+
+Subir stack de produção:
+
+```bash
+make prod-up
+```
+
+Logs:
+
+```bash
+make prod-logs
+```
+
+Encerrar:
+
+```bash
+make prod-down
 ```
 
 ## Fluxo de tipos
@@ -55,3 +79,4 @@ make dev-frontend
 - OpenAPI 3.1: `http://localhost:8080/api/v1/openapi.json`
 - OpenAPI 3.0.3: `http://localhost:8080/api/v1/openapi-3.0.yaml`
 - Health: `http://localhost:8080/health`
+- Frontend SSR: `http://localhost:4321`

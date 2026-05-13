@@ -1,8 +1,15 @@
+.git/
+.github/
+.vscode/
+
 backend/tmp/
 backend/bin/
 frontend/node_modules/
 frontend/.astro/
 frontend/dist/
 
-.env.prod
-.DS_Store
+.env
+.env.*
+!.env.prod.example
+
+Dockerfile
