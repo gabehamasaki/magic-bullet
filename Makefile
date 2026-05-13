@@ -1,10 +1,10 @@
 .PHONY: up down install-tools sync-types dev-backend dev-frontend build-backend build-frontend test-backend dev prod-build prod-up prod-down prod-logs
 
 up:
-	docker compose -f infra/docker-compose.yml up -d
+	docker compose --env-file .env -f infra/docker-compose.yml up -d
 
 down:
-	docker compose -f infra/docker-compose.yml down
+	docker compose --env-file .env -f infra/docker-compose.yml down
 
 install-tools:
 	go install github.com/air-verse/air@latest
@@ -32,13 +32,13 @@ dev: up sync-types
 	npm --prefix frontend exec -- concurrently --kill-others-on failure --names backend,frontend --prefix name --prefix-colors auto "make dev-backend" "make dev-frontend"
 
 prod-build:
-	docker compose --env-file .env.prod -f infra/docker-compose.prod.yml build
+	docker compose --env-file .env -f infra/docker-compose.prod.yml build
 
 prod-up:
-	docker compose --env-file .env.prod -f infra/docker-compose.prod.yml up -d --build
+	docker compose --env-file .env -f infra/docker-compose.prod.yml up -d --build
 
 prod-down:
-	docker compose --env-file .env.prod -f infra/docker-compose.prod.yml down
+	docker compose --env-file .env -f infra/docker-compose.prod.yml down
 
 prod-logs:
-	docker compose --env-file .env.prod -f infra/docker-compose.prod.yml logs -f
+	docker compose --env-file .env -f infra/docker-compose.prod.yml logs -f

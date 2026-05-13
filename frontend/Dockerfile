@@ -31,10 +31,11 @@ WORKDIR /app
 
 COPY --from=builder /src/frontend/package.json /app/package.json
 COPY --from=builder /src/frontend/package-lock.json /app/package-lock.json
-COPY --from=builder /src/frontend/node_modules /app/node_modules
 COPY --from=builder /src/frontend/dist /app/dist
 
-RUN addgroup -S app && \
+RUN npm ci --omit=dev && \
+    npm cache clean --force && \
+    addgroup -S app && \
     adduser -S app -G app && \
     chown -R app:app /app
 
