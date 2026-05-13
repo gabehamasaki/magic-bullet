@@ -9,6 +9,10 @@ down:
 install-tools:
 	go install github.com/air-verse/air@latest
 
+install-dependencies:
+	cd backend && go mod tidy
+	npm --prefix frontend install
+
 sync-types:
 	cd backend && go run ./cmd/api openapi > openapi/openapi.yaml
 	npm --prefix frontend run generate:types
