@@ -1,4 +1,4 @@
-package api
+package handlers
 
 import (
 	"context"
@@ -21,18 +21,18 @@ type GetUserOutput struct {
 	Body UserProfile
 }
 
-func registerUserRoutes(api huma.API) {
-	huma.Register(api, huma.Operation{
+func (h *Handler) registerGetUserRoute() {
+	huma.Register(h.API, huma.Operation{
 		OperationID: "get-user",
 		Method:      http.MethodGet,
 		Path:        "/users/{id}",
 		Summary:     "Fetch user profile",
 		Description: "Get a user by their unique ID.",
 		Tags:        []string{"Users"},
-	}, getUser)
+	}, h.getUser)
 }
 
-func getUser(_ context.Context, input *GetUserInput) (*GetUserOutput, error) {
+func (h *Handler) getUser(_ context.Context, input *GetUserInput) (*GetUserOutput, error) {
 	return &GetUserOutput{
 		Body: UserProfile{
 			ID:    input.ID,
