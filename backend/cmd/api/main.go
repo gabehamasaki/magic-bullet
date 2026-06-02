@@ -4,16 +4,16 @@ import (
 	"log"
 	"os"
 
-	mbapi "magic-bullet/backend/internal/api"
+	api "magic-bullet/backend/internal/api"
 )
 
 func main() {
-	app := mbapi.NewApp()
+	app := api.NewApp()
 
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
 		case "openapi":
-			if err := mbapi.WriteOpenAPI(os.Stdout, app.API); err != nil {
+			if err := api.WriteOpenAPI(os.Stdout, app.API); err != nil {
 				log.Fatalf("failed to generate openapi spec: %v", err)
 			}
 			return
@@ -24,7 +24,7 @@ func main() {
 		}
 	}
 
-	addr := mbapi.HTTPAddr()
+	addr := api.HTTPAddr()
 	log.Printf("magic-bullet backend listening on %s", addr)
 	if err := app.Engine.Run(addr); err != nil {
 		log.Fatalf("server stopped: %v", err)
