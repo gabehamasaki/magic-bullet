@@ -83,6 +83,28 @@ info:
   version: 1.0.0
 openapi: 3.0.3
 paths:
+  /ping:
+    get:
+      description: Check the server's health status.
+      operationId: ping
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                description: Ping response
+                example: pong
+                type: string
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Ping the server
+      tags:
+        - Health
   /users/{id}:
     get:
       description: Get a user by their unique ID.
