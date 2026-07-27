@@ -6,6 +6,7 @@ import (
 
 	api "magic-bullet/backend/internal/api"
 	"magic-bullet/backend/internal/config"
+	"magic-bullet/backend/internal/database"
 )
 
 func main() {
@@ -15,7 +16,12 @@ func main() {
 		log.Fatalf("failed do load config: %v", err)
 	}
 
-	app := api.NewApp(config)
+	database, err := database.NewPGSQLConnector(config)
+	if err != nil {
+		log.Fatalf("failed do create database connector: %v", err)
+	}
+
+	app := api.NewApp(config, database)
 
 	if len(os.Args) > 1 {
 		switch os.Args[1] {

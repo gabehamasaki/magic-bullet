@@ -3,6 +3,7 @@ package api
 import (
 	"magic-bullet/backend/internal/api/handlers"
 	"magic-bullet/backend/internal/config"
+	"magic-bullet/backend/internal/database"
 	"os"
 
 	"github.com/danielgtaylor/huma/v2"
@@ -16,9 +17,10 @@ type App struct {
 	Engine *gin.Engine
 	API    huma.API
 	Config *config.Config
+	Database database.Database
 }
 
-func NewApp(config *config.Config) *App {
+func NewApp(config *config.Config, databsae database.Database) *App {
 	// Set Gin mode based on environment variable, defaulting to release mode
 	gin.SetMode(envOrDefault("GIN_MODE", gin.ReleaseMode))
 
