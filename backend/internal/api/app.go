@@ -2,6 +2,7 @@ package api
 
 import (
 	"magic-bullet/backend/internal/api/handlers"
+	"magic-bullet/backend/internal/config"
 	"os"
 
 	"github.com/danielgtaylor/huma/v2"
@@ -14,9 +15,10 @@ const basePath = "/api/v1"
 type App struct {
 	Engine *gin.Engine
 	API    huma.API
+	Config *config.Config
 }
 
-func NewApp() *App {
+func NewApp(config *config.Config) *App {
 	// Set Gin mode based on environment variable, defaulting to release mode
 	gin.SetMode(envOrDefault("GIN_MODE", gin.ReleaseMode))
 
@@ -25,12 +27,12 @@ func NewApp() *App {
 	router.Use(gin.Logger(), gin.Recovery())
 
 	// Configure Huma API with OpenAPI metadata
-	config := huma.DefaultConfig("Magic Bullet API", "1.0.0")
-	config.Servers = []*huma.Server{{URL: basePath}}
+	apiCFG := huma.DefaultConfig("Magic Bullet API", "1.0.0")
+	apiCFG.Servers = []*huma.Server{{URL: basePath}}
 
 	// Create Huma API instance and register it with the Gin router
 	v1 := router.Group(basePath)
-	api := humagin.NewWithGroup(router, v1, config)
+	api := humagin.NewWithGroup(router, v1, apiCFG)
 
 	// Initialize Handler and register routes
 	handlers := handlers.NewHandler(api)
@@ -39,6 +41,7 @@ func NewApp() *App {
 	return &App{
 		Engine: router,
 		API:    api,
+		Config: config,
 	}
 }
 

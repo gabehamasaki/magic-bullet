@@ -5,10 +5,17 @@ import (
 	"os"
 
 	api "magic-bullet/backend/internal/api"
+	"magic-bullet/backend/internal/config"
 )
 
 func main() {
-	app := api.NewApp()
+
+	config := config.NewConfig()
+	if err := config.Load(); err != nil {
+		log.Fatalf("failed do load config: %v", err)
+	}
+
+	app := api.NewApp(config)
 
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
