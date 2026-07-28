@@ -1,4 +1,4 @@
-.PHONY: up down install-tools sync-env sync-types dev-backend dev-frontend build-backend build-frontend test-backend dev prod-build prod-up prod-down prod-logs
+.PHONY: up down install-tools sync-env gen-pass sync-types dev-backend dev-frontend build-backend build-frontend test-backend dev prod-build prod-up prod-down prod-logs
 
 up:
 	docker compose --env-file .env -f infra/docker-compose.yml up -d
@@ -15,6 +15,20 @@ install-dependencies:
 
 sync-env:
 	cp .env backend/.env
+
+gen-pass:
+	@test -f .env || (echo "Missing .env — run: cp .env.example .env" && exit 1)
+	@DB_PASS=$$(openssl rand -hex 24); \
+	MINIO_PASS=$$(openssl rand -hex 24); \
+	sed -i \
+		-e "s|^DATABASE_PASSWORD=.*|DATABASE_PASSWORD=$$DB_PASS|" \
+		-e "s|^DATABASE_PASS=.*|DATABASE_PASS=$$DB_PASS|" \
+		-e "s|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=$$DB_PASS|" \
+		-e "s|^MINIO_ROOT_PASSWORD=.*|MINIO_ROOT_PASSWORD=$$MINIO_PASS|" \
+		-e "s|^MINIO_SECRET_KEY=.*|MINIO_SECRET_KEY=$$MINIO_PASS|" \
+		.env
+	@$(MAKE) sync-env
+	@echo "Passwords updated in .env and backend/.env"
 
 sync-types:
 	cd backend && go run ./cmd/api openapi > openapi/openapi.yaml
