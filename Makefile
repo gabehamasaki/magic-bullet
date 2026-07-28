@@ -1,4 +1,4 @@
-.PHONY: up down install-tools sync-types dev-backend dev-frontend build-backend build-frontend test-backend dev prod-build prod-up prod-down prod-logs
+.PHONY: up down install-tools sync-env sync-types dev-backend dev-frontend build-backend build-frontend test-backend dev prod-build prod-up prod-down prod-logs
 
 up:
 	docker compose --env-file .env -f infra/docker-compose.yml up -d
@@ -13,11 +13,14 @@ install-dependencies:
 	cd backend && go mod tidy
 	npm --prefix frontend install
 
+sync-env:
+	cp .env backend/.env
+
 sync-types:
 	cd backend && go run ./cmd/api openapi > openapi/openapi.yaml
 	npm --prefix frontend run generate:types
 
-dev-backend:
+dev-backend: sync-env
 	cd backend && air -c .air.toml
 
 dev-frontend:
@@ -32,7 +35,7 @@ build-frontend:
 test-backend:
 	cd backend && go test ./...
 
-dev: up sync-types
+dev: sync-env up sync-types
 	npm --prefix frontend exec -- concurrently --kill-others-on failure --names backend,frontend --prefix name --prefix-colors auto "make dev-backend" "make dev-frontend"
 
 prod-build:

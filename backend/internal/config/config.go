@@ -24,7 +24,7 @@ type DatabaseConfig struct {
 type RedisConfig struct {
 	Host string
 	Port int
-	User string
+	DB int
 	Password string
 }
 
@@ -53,6 +53,18 @@ func (c *Config) Load() error {
 		DBName: os.Getenv("DATABASE_NAME"),
 	}
 
+	port, err = strconv.Atoi(os.Getenv("REDIS_PORT"))
+	if err != nil {
+		port = 6379
+	}
+
+
+	c.Redis = &RedisConfig{
+		Host: os.Getenv("REDIS_HOST"),
+		Port: port,
+		Password: os.Getenv("REDIS_PASSWORD"),
+		DB: 1,
+	}
 
 
 	return nil

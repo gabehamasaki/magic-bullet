@@ -2,6 +2,7 @@ package api
 
 import (
 	"magic-bullet/backend/internal/api/handlers"
+	"magic-bullet/backend/internal/cache"
 	"magic-bullet/backend/internal/config"
 	"magic-bullet/backend/internal/database"
 	"os"
@@ -18,9 +19,10 @@ type App struct {
 	API    huma.API
 	Config *config.Config
 	Database database.Database
+	Cache cache.CacheStore
 }
 
-func NewApp(config *config.Config, databsae database.Database) *App {
+func NewApp(config *config.Config, databsae database.Database, cache cache.CacheStore) *App {
 	// Set Gin mode based on environment variable, defaulting to release mode
 	gin.SetMode(envOrDefault("GIN_MODE", gin.ReleaseMode))
 
@@ -44,6 +46,7 @@ func NewApp(config *config.Config, databsae database.Database) *App {
 		Engine: router,
 		API:    api,
 		Config: config,
+		Cache: cache,
 	}
 }
 

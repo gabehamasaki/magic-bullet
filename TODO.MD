@@ -4,5 +4,5 @@ Coisas para aprimorar meu boilerplate
 
 [ ] Adicionar sistema basico de autenticação
 [X] Adicionar basicos para banco de dados
-[ ] Adicionar basicos para redis
+[X] Adicionar basicos para redis
 [ ] Adicionar basicos para S3 (MINIO)

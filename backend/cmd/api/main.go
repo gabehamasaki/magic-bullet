@@ -5,6 +5,7 @@ import (
 	"os"
 
 	api "magic-bullet/backend/internal/api"
+	"magic-bullet/backend/internal/cache"
 	"magic-bullet/backend/internal/config"
 	"magic-bullet/backend/internal/database"
 )
@@ -21,7 +22,14 @@ func main() {
 		log.Fatalf("failed do create database connector: %v", err)
 	}
 
-	app := api.NewApp(config, database)
+	cache, err := cache.NewRedisConnector(config)
+	if err != nil {
+		log.Fatalf("failed do create cache connector: %v", err)
+	}
+
+
+
+	app := api.NewApp(config, database, cache)
 
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
