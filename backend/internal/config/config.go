@@ -8,6 +8,7 @@ import (
 )
 
 type Config struct {
+	APP_SECRET string
 	Database *DatabaseConfig
 	Redis *RedisConfig
 }
@@ -65,6 +66,8 @@ func (c *Config) Load() error {
 		Password: os.Getenv("REDIS_PASSWORD"),
 		DB: 1,
 	}
+
+	c.APP_SECRET = os.Getenv("APP_SECRET")
 
 
 	return nil
